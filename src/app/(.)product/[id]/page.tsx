@@ -20,14 +20,18 @@ const ProductDetailedPage = () => {
 
   const getData = async() => {
     setLoading(true);
-    const response = await fetch(`https://fakestoreapi.com/products/${id}`);
-    const result = response.json();
+    const res = await fetch(
+      `https://fakestoreapi.com/products/${id}`
+    );
+    const result = await res.json();
     setProduct(result);
     setLoading(false);
   }
 
   useEffect(() => {
     getData();
+
+   
   }, [id])
 
   return (
@@ -38,8 +42,39 @@ const ProductDetailedPage = () => {
       }} 
       className='relative z-50'> 
       <div className="fixed inset-0 bg-black/30" aria-hidden="true">
-          <div className="fixed inset-0 overflow-y-auto">
 
+          <div className="fixed inset-0 overflow-y-auto">
+              <div className="flex min-h-full items-center justify-center p-4">
+                <Dialog.Panel
+                  className={'mx-auto max-w-3xl rounded bg-white p-10'}
+                >
+                   {
+                      loading ? (
+                        <div className='h-8 w-8 rounded-full border-2 border-dotted border-blue-600 animate-spin' />
+                      ):(
+                        <div className="flex gap-x-8 h-96">
+                            {product?.image && (
+                              <div className='relative w-72 h-full hidden md:inline'>
+                                <CustomImage product={product} fill />
+                              </div>
+                            )}
+                            
+                            <div className="flex flex-1 flex-col">
+                              <div className="flex-1">
+                                  <h4 className='font-semibold'>
+                                    {product?.title}
+                                  </h4>
+                                  <p className='font-medium text-sm'>
+                                    ${product?.price}
+                                  </p>
+                              </div>
+                            </div>
+
+                        </div>
+                      )
+                   }
+                </Dialog.Panel>
+              </div>
           </div>
       </div>
 
