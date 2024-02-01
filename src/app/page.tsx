@@ -2,6 +2,7 @@
 import Product from "@/components/Product";
 import { ProductType } from "@/types";
 import Hero from "@/components/Hero";
+
 export default async function Home() {
   const res = await fetch("https://fakestoreapi.com/products")
   const products: ProductType[] = await res.json();

@@ -3,11 +3,12 @@
 import CustomImage from '@/components/image';
 import { ProductType } from '@/types';
 import { Dialog } from '@headlessui/react';
-import { StarIcon as StarIconOutline } from '@heroicons/react/24/outline';
-import { StarIcon } from '@heroicons/react/24/solid';
+
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
+
+import ReactStars from 'react-stars';
 
 const ProductDetailedPage = () => {
 	const [loading, setLoading] = useState(false);
@@ -17,19 +18,42 @@ const ProductDetailedPage = () => {
 	const { id } = useParams();
 	const router = useRouter();
 
+  const handleClick = () => {
+    const products: ProductType[] = JSON.parse(localStorage.getItem('carts') as string) || [];
+    
+    const isExistProduct = products.find(c => c.id === product?.id);
+    
+    if (isExistProduct) {
+			const updatedData = products.map(c => {
+				if (c.id === product?.id) {
+					return {
+						...c,
+						quantity: c.quantity + 1,
+					};
+				}
 
+				return c;
+			});
+
+			localStorage.setItem('carts', JSON.stringify(updatedData));
+		} else {
+			const data = [...products, { ...product, quantity: 1 }];
+			localStorage.setItem('carts', JSON.stringify(data));
+		}
+		toast('Product added to your bag!!');
+  }
+
+  const getData = async() => {
+    setLoading(true);
+    const res = await fetch(
+      `https://fakestoreapi.com/products/${id}`
+    );
+    const result = await res.json();
+    setProduct(result);
+    setLoading(false);
+  }
 
 	useEffect(() => {
-		async function getData() {
-			setLoading(true);
-			const res = await fetch(
-				`https://fakestoreapi.com/products/${id}`
-			);
-			const product = await res.json();
-			setProduct(product);
-			setLoading(false);
-		}
-
 		getData();
 	}, [id]);
 
@@ -58,7 +82,7 @@ const ProductDetailedPage = () => {
                   )}
                   <div className='flex-1 flex flex-col'>
                     <div className='flex-1'>
-                      
+
                       <h4 className='font-semibold'>
                         {product?.title}
                       </h4>
@@ -71,30 +95,11 @@ const ProductDetailedPage = () => {
                         <p>{product?.rating.rate}</p>
                         {product?.rating.rate && (
                           <div className='flex items-center ml-2 mr-6'>
-                            {Array.from(
-                              {
-                                length: Math.floor(product.rating.rate),
-                              },
-                              (_, i) => (
-                                <StarIcon
-                                  key={i}
-                                  className='h-4 w-4 text-yellow-500'
-                                />
-                              )
-                            )}
-                            {Array.from(
-                              {
-                                length:
-                                  5 - Math.floor(product.rating.rate),
-                              },
-                              (_, i) => (
-                                <StarIconOutline
-                                  key={i}
-                                  className='h-4 w-4 text-yellow-500'
-                                />
-                              )
-                            )}
                           
+                            <ReactStars
+                              value={product.rating.rate}
+                              edit={false}
+													  />
                           </div>
                         )}
                         <p className='text-blue-600 hover:underline cursor-pointer text-xs'>
@@ -110,7 +115,7 @@ const ProductDetailedPage = () => {
                     <div className='space-y-3 text-sm'>
                       <button
                         className='button w-full bg-blue-600 text-white border-transparent hover:border-blue-600 hover:bg-transparent hover:text-black'
-                        
+                        onClick={handleClick}
                       >
                         Add to bag
                       </button>

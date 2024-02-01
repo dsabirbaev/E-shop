@@ -5,6 +5,6 @@ export interface ProductType {
 	description: string;
 	category: string;
 	image: string;
-	quantity: number;
+	quantity: number;    ///// for localstorage to the card
 	rating: { rate: number; count: number };
 }

@@ -22,13 +22,11 @@ const Navbar = () => {
 		    </nav>
 
 
-            <button className="button bg-blue-600 text-white border-transparent hover:border-blue-600 hover:text-black hover:bg-transparent">
-                Log in
-            </button>
-
-            <button className="button bg-transparent border-blue-600 hover:border-transparent hover:text-white hover:bg-blue-600">
-                Sign up
-            </button>
+            <Link href={'/shopping-cart'}>
+                <button className='button bg-blue-600 text-white border-transparent hover:border-blue-600 hover:bg-transparent hover:text-black'>
+                    My bag
+                </button>
+			</Link>
         </div>
 
         
