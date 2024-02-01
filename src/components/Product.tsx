@@ -3,7 +3,7 @@
 import { ProductType } from '@/types';
 import Link from 'next/link';
 import { FC } from 'react';
-// import CustomImage from './image';
+import CustomImage from './image';
 
 const Product: FC<{ product: ProductType }> = ({ product }) => {
 	
@@ -14,7 +14,7 @@ const Product: FC<{ product: ProductType }> = ({ product }) => {
 			className='h-96 flex flex-col p-6 rounded-lg group hover:scale-105 transition-transform ease-out duration-200 border'
 		>
 			<div className='relative max-h-80 flex-1'>
-				{/* <CustomImage product={product} fill /> */}
+				<CustomImage product={product} fill />
 			</div>
 
 			<h3 className='tracking-widest text-indigo-500 text-xs font-medium title-font'>
